@@ -1,1 +1,55 @@
 * Big data on AWS
+
+** Intro to services
+
+   Going through EC2, Route 53, S3 and so on.
+
+** What is big data?
+
+   * When you have to start innovating with data collection, storage,
+     usage then you have a big data problem.
+   * Depends on who is using it.
+   * Rate of expansion is increasing exponentially.
+
+** EMR
+
+   * Hadoop on AWS
+   * Hadoop cluster launched on average every five seconds.
+
+** Kinesis
+
+   * Makes data available in real time
+   * What is real time?
+     * Depends - micro second to five minute?
+   * Multiple devices writing in
+     * Simple because many devices will be low power
+   * Bunch of readers processing the data
+   * Records exist for only 24h
+   * Each shard ingests at up to 1 MB/s or 1000 tps
+   * Each shart outputs at up to 2 MB/s or 2000 tps
+
+*** Terminology
+
+    * Stream
+    * Shard
+      * Every stream has at least one shard
+    * Connector
+      * Transforms from Kinesis format to output format
+
+** Redshift
+
+   * Redshift understands snowflake and star schemas and automatically
+     optimises for them
+   * There are as many slices as there are CPUs
+     * By default it's round robin
+     * Use a distribution key to choose how the rows get distributed per
+       slice.
+     * You can put nodes from different tables on the same slice.
+
+** Data pipeline
+
+** Hands on
+
+*** What we're doing
+
+    * [[https://s3.amazonaws.com/pmv.public/big-data-lab/BigDataLabManual.pdf][Big data lab manual]]
