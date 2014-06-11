@@ -97,3 +97,54 @@
      * Guarantee that the virtual DOM and the browser DOM will always
        match. Therefore, if youc create an input field with nothing in
        it, you won't be able to type in it.
+
+** Devops practices to create flow - Jez Humble
+
+   * Where's the production line?
+     * Commit which is the start on the production line
+   * Kanban
+   * Toyota made looms
+     * Actually called Toyoda
+     * The breakthrough loom automatically stopped when there was a problem
+       * There was no way to make a defective product
+   * Automation + People = autonomation
+   * [[http://www.thisamericanlife.org/radio-archives/episode/403/nummi][This American Life NUMMI]]
+     * GM plant with workforce that were demotivated
+     * GM, Toyota joint venture
+     * GM were going to fire everyone
+     * Toyota rehired the 'worst workforce' and made them how to make
+       high quality products
+       * Cars never come off of the line in a broken state
+       * Workers have the ability to stop the line and figure out what's wrong.
+       * By giving workers control they were able to make the factory
+         the best of GM
+     * [[http://www.jamesshore.com/Blog/Continuous-Integration-on-a-Dollar-a-Day.html][James Shaw: CI on a dollar a day]]
+       * Test, build locally
+       * Take lock object
+       * Check in
+       * Build on other machine
+         * If it fails, take the code out
+   * Does CI scale?
+     * Yes, better than feature branches. Work from master.
+   * Validate before production
+     * People might be needed
+   * HP Laserjet
+     * 5% time spent innovating, so need to change
+     * Decided to rewrite
+       * Consider [[http://martinfowler.com/bliki/StranglerApplication.html][strangler pattern]] instead of rewriting
+     * All printers used to have different binaries. Change so that
+       there is one binary.
+     * Director of engineering - fix by walking and talking. "Why is the
+       build breaking?"
+     * Build pipeline
+       * Levels of builds: 1, 2, 3, 4
+       * 1 is basic tests
+       * 2 is simulator
+       * 3 firmware on logic boards
+       * 30k hours of tests that run on a grid over night
+       * Move the tests between levels. If a test at level one passes a
+         lot, move it down. If a test at L4 fails a lot, move it up.
+     * Get to the point where you get things done when you say that it's
+       going to be done.
+     * [[http://www.amazon.com/Practical-Approach-Large-Scale-Agile-Development/dp/0321821726][A Practical Approach to Large-Scale Agile Development]]
+     * [[http://puppetlabs.com/sites/default/files/2014-state-of-devops-report.pdf][2014 State of Devops Report]]
