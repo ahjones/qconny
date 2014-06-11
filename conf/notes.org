@@ -90,3 +90,10 @@
    * Fron Instagram
    * Build a virtual immutable DOM.
    * Throw away and rerender whenever things change.
+   * Embded XML in the JS, there's a precompilation phase.
+   * Reconcile
+     * Figure out how to change the virtual DOM to match the immutable
+       structure
+     * Guarantee that the virtual DOM and the browser DOM will always
+       match. Therefore, if youc create an input field with nothing in
+       it, you won't be able to type in it.
