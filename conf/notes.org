@@ -31,3 +31,62 @@
       * [[http://elm-lang.org/][Elm]]
         * A functional language for web UIs
         * Runs on the web with live environment
+      * Leisure
+        * presentation manager with built in functional lazy language
+
+** Scaling Foursquare - From checkins to recommendations
+
+   Jon Hoffman
+
+   Foursquare have moved from just check-ins and have turned into a
+   recommendation engine. There are 160 employees, 90 of which are
+   engineers.
+
+*** Data storage
+
+    * Started with MySQL in 2009, but pretty quickly moved to Postgres.
+    * Memcache in front of SQL engine.
+    * By the time they had 1e6 users they had to split the DB
+      * Joins in app code
+      * Not enough RAM for indexes
+    * Sharding
+    * Consider Mongo, Cassandra, HBase
+    * Mongo
+      * They hoped that features would be developed just in time.
+      * Gamble, but it worked.
+      * 2010-2011 migration from Postgres to Mongo.
+        * Custom code
+      * Now 15 mongo clusters, 600 nodes
+      * 1e6 million queries per second
+    * Memcache
+    * Elastic search
+    * Readonly KV store
+      * HFile service
+      * Hadoop -> HFile -> App servers
+      * Use Zookeeper for datatype to machine mapping
+    * Zookeeper is the 'indispensable glue that holds everything
+      together at Foursquare
+    * Cachine service
+      * Tail Mono oplog, put interesting events into Kafka, then info
+        Redis cache.
+
+*** Application complexity
+
+    * Scala, Lift
+    * Monolithic code base
+      * Deploy everything all the time
+      * Compile everything all the time
+    * Move to SOA
+      * Split into offline, API, Website
+      * Looked at Finagle from Twitter
+    * Trace requests by sending correlatoin ID from caller to callee.
+    * Exception aggregation
+    * ZooKeeper for host names
+    * Circuit breaker
+      * Loosely based on Hystrix from Netflix
+
+** Facebook React
+
+   * Fron Instagram
+   * Build a virtual immutable DOM.
+   * Throw away and rerender whenever things change.
