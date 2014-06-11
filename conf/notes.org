@@ -160,3 +160,4 @@
      * Let workers try things out - tell them where you want to get to,
        not how to get there. "What are we trying to achieve, where are
        we now, what's the next step?"
+     * [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1765804/pdf/v013p0ii22.pdf][A typology of organisational cultures]]
