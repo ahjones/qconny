@@ -100,6 +100,8 @@
 
 ** Devops practices to create flow - Jez Humble
 
+   * [[http://www.slideshare.net/jezhumble/devops-culture-and-practices-to-create-flow][Slideshare]]
+
    * Where's the production line?
      * Commit which is the start on the production line
    * Kanban
@@ -147,4 +149,14 @@
      * Get to the point where you get things done when you say that it's
        going to be done.
      * [[http://www.amazon.com/Practical-Approach-Large-Scale-Agile-Development/dp/0321821726][A Practical Approach to Large-Scale Agile Development]]
+     * [[http://www.amazon.com/The-Corporate-Culture-Survival-Guide/dp/0470293713][A Corporate Culture Survival Guide]]
      * [[http://puppetlabs.com/sites/default/files/2014-state-of-devops-report.pdf][2014 State of Devops Report]]
+     * High trust
+       * Measure culture
+         * Ron Westrum
+     * What Toyota is doing at any one time isn't a best practice and
+       you can't copy and paste it from one org to another. Toyota
+       solves their current problems.
+     * Let workers try things out - tell them where you want to get to,
+       not how to get there. "What are we trying to achieve, where are
+       we now, what's the next step?"
