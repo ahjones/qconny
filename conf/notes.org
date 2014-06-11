@@ -1,0 +1,33 @@
+* Day one
+** Keynote - Whither Web Programming?
+
+   Gilad Bracha - coauthor Java 8 language spec
+
+*** Strengths
+
+    * Always available
+      * ??
+      * Offline can be flakey slow
+      * Storage isn't always available
+    * Hard to implement new languages
+    * Issues (JS)
+      * Integers not available
+      * Concurrency
+      * Privacy
+      * Stack access
+    * Dart
+      * Try Dart online
+        * Has to compile the program
+      * But can make it faster by using incremental compilation [[http://gilad.try-dart-lang.appspot.com/][here]]
+    * The Dart book
+      * Isn't ready yet, because the reflection API isn't yet out.
+      * The reflection API isn't read because the dart2js output is too
+        large.
+      * It's hard to know what you're going to call if you allow
+        reflection.
+      * In other languages you don't have to worry about keeping
+        programs under 200kb.
+    * Other
+      * [[http://elm-lang.org/][Elm]]
+        * A functional language for web UIs
+        * Runs on the web with live environment
