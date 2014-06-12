@@ -161,3 +161,49 @@
        not how to get there. "What are we trying to achieve, where are
        we now, what's the next step?"
      * [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1765804/pdf/v013p0ii22.pdf][A typology of organisational cultures]]
+
+** Big Data in Capital Markets
+
+   * What is big data? In this presentation it's an umbrella term, for
+     techniques, tools etc.
+   * The Vs: Volume, Variety, Veracity, Velocity
+   * Look at the fundamentals, not just copy 'internet firms'
+   * Patterns
+     * Hadoop as ETL
+       * 70% of Hadoop deployments in finance are for ETL
+     * Hadoop as BI
+       * Hive, PIG
+       * Impala
+     * Multiasset datastore
+     * Big data governance
+   * Anti-patterns
+     * Fine grained jobs - interdependency pain
+   * Data
+     * You can get an EC2 instance with 250GB of memory, so you only
+       need four machines to handle 1TB. This isn't a massive change
+       from what you're used to. If you want to keep things in memory
+       and you have > 1PB you have to think harder.
+     * All of flickr is 2PB.
+     * Semi structured data
+       * How much structure do you need?
+       * Even if you have structured data, what happens if you have more
+         than one set of data, each with a different structure?
+       * NoSQL makes sense for rapid analysis
+       * 99% of processing on unstructured data is to derive structure
+         from it.
+       * Moving data around is slow
+     * Latency v througput
+       * 1s to do something on one machine, 1s to do 10 things on 10
+         machines *but* it still takes a second. You've increased
+         throughput but the latency is the same.
+
+*** Case studies
+
+**** Hadoop archive
+
+     Replace tape archive with HDFS. Tapes fail.
+
+**** Client review
+
+     Pull in information from one 'big data' repository for clients when
+     they're 'on boarded'.
