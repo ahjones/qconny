@@ -207,3 +207,211 @@
 
      Pull in information from one 'big data' repository for clients when
      they're 'on boarded'.
+
+** Design and Evolution of Chartbeat's Architecture
+
+   Wes Chow
+
+   * Chartbeat has three products: Everyone, Publishers, Advertisers.
+   * They measure engagement with sites: reading and writing. If the
+     user is the moving the mouse or scrolling around then they're
+     considered to be reading.
+   * Chartbeat creates metrics that measure engagement.
+   * Data is stored only with first party cookies (so they can't tell if
+     you're the same user on a different site).
+   * Data set using img tags
+
+*** Memoryfly
+
+    * A C++ in memory data store that they've written.
+    * Can handle 200k pings per second.
+
+*** Chartbeat architecture
+
+    * Ping goes to Chartbeat.
+    * There's a routing layer that chooses which shart to send data to
+      based on the customer name.
+    * They're running a custom NGinx server with embedded Lua.
+    * They're using Lua because it's easy to embed in C and easy to
+      write in.
+    * They wrote Memoryfly before Storm came out
+
+*** How to create a historical chart
+
+
+          .            .....
+          .      .......
+          .     .
+          .   ..
+          ....
+          ...................
+
+    * Take snapshots periodically.
+    * API servers send messages to async workers that write to Mongo
+      replicas.
+    * The API servers can then query the Mongo replicas.
+
+*** What about really big cutomers?
+    * Split the customer over more than one server
+    * Data is split based on a view key hash.
+    * Interesting problem: can't assume that the top 10 page overall is
+      in the top 10 for any of the separate servers.
+
+*** How to measure loyalty?
+    * If you only measure visitors in aggregate it's impossible to tell
+      if users return to the site. To find out if a user returns you
+      have to sample all visitors. Depending on the size of the customer
+      the percentage of people that are sampled varies between 1 and 100
+      per cent.
+    * Lua embedded in Nginx decides which traffic should be sampled.
+    * Raw data is sent to S3, then EMR processes it and stores the
+      results in Redshift.
+    * Uses RabbitMQ for messaging
+
+*** Lessons
+    * Performance - it takes ~3ms for a random disk read with rotational
+      disks.
+    * Every five minutes they add a new lne to MongoDB. To get all
+      customer data for a 24h period if the data is stored in a naive
+      way the read head has to skip to every record.
+    * If the data is sorted by customer instead then the query can do
+      sequential reads.
+
+** Facebook Apollo: Strong Consistency at Scale
+
+*** Consistency
+    * There's been innovation in weak consistency, but not much in
+      strong systems.
+    * AP is popular, see Cassandra and Dynamo
+    * Facebook prefers CP
+
+*** Replication
+
+    * Sharded data @ one location
+    * Slaves push data to other locations so other people can read them
+    * Read after write
+    * Sticky master (except after failure)
+    * FB like to
+      * have atomic updats
+      * not lose writes
+    * In a data centre you're likely to see whole rack failures (eg
+      switch breaks).
+    * AP style systems are cool, but you can use them to create CP style
+      building blocks.
+
+*** Apollo
+
+    * C++11 with Thrift 2
+    * Paxos
+    * In the same way that HBase is build on top of HDFS, Apollo is
+      built on top of a shared quorum.
+    * The shart has
+      * Consensus protocol build with Raft
+      * Storage with RocksDB, MySQL
+      * User storage CRDT
+      * Use code execution
+
+** Keynote: Engineering Velocity at Nefflix
+   * Netflix wants to increase engineering speed.
+   * They're aware that the rate of change is inversely proportional to
+     the availability of the system.
+   * What can they do to increase the availability too?
+   * Engineers have freedom and responsibility
+     * Example: engineer wanted to bring in Python. That was freedom. He
+       also had the responsibility to write support for the language too.
+   * Managers build context, they don't control.
+     * Hire talented people and then get out of the way
+
+*** Freedom
+    * Built predictive autoscale because ASGs aren't predictive.
+    * Predictive version can fall back to regular ASG behaviour if it
+      doesn't correctly predict the load.
+    * Netflix support multiple paths of exploration.
+      * The tooling team hadn't finished working on the deployment
+        tools, when another team needed to deploy. The other team wrote
+        their own deployment software, and then the tool team could
+        learn more about what works and what doesn't.
+
+** Mike Feathers - If we took Conway's Law Seriously
+
+   * Conway's law: System design will mirror the communication structure
+     of the organisation that produced it
+   * You do want boundaries in software. Put the authors of different
+     sides of the boundary on different teams.
+   * Active management - choose to use Conway's law to create
+     differences in software
+     * Split the team
+     * Merge teams (how often does this happen?)
+   * How do you maintain core knowledge yet still allow people to move
+     around?
+   * Monitor cruft. If people avoid working on bits of the software
+     that's something that you need to know about.
+   * Open for extension, closed for modification
+     * Engineering principle
+     * Monitor the code repositor for this
+
+*** Turnover
+
+    * High in the IT industry. Does the code turnover as much?
+    * Code stays around longer than people. Ditch software and rewrite
+      it more often. The team is not the codebase
+
+*** Biology and software
+
+    * There are similarities between biology and software.
+    * As a species we survive because individuals die.
+    * See the strangler pattern for replacing bits of software.
+    * Book: Peter Provost - The Butterfly Effect
+      * FxCop was created by MS to inrease the quality of code. It was
+        meant to run every time you check software in to VCS and not let
+        you check in if there is a problem with the code
+        quality. Unfortunately a side effect is that people stopped
+        checking in so often. It was a little change that affected
+        quality in the wrong direction.
+    * Practice large scale refactoring.
+
+** Eric Evans - Strategic Design: Embrace Imperfection
+
+   * You need to be able to make broad, true assertions about your software.
+   * A bounded context is a part of a system when the assertion holds.
+   * A team must agree on the meanings of the assertions.
+   * Multiple different models are both desirable and inevitable.
+     Two teams working on the same problem will have different
+     models. The coordination overhead required to stop this is
+     prohibitive - either have one team or allow the different models to
+     form.
+   * An example of good architecutre is Netflix's microservice
+     architecture.
+     * Each service is its own bounded context, and will nec. have it's
+       own level of quality.
+     * The acknowledge imperfection. See for example Chaos Monkey.
+   * SOA allows us to define boundaries, but it's not required.
+     * Example of something not to do - write services that share a DB.
+   * Microservices talk to each other. The boundary that we've created
+     allows us to dfeine a language to describe the service.
+     You want different languages for different things. Be concious o
+     fthe language and allow nouns to have different meanings in
+     different places.
+
+*** REST (Ken Webber)
+    * Embrace imperfection. Don't try to implement the ideal. Parts of
+      the web are actively trying to harm us, and yet it still works.
+    * The big-ball-of-mud can be refactored to be good, but not everyone
+      can do it.
+    * If you want to get away from the BBOM then consider the legacy
+      escape pattern
+      * Add an anti-corruption layer
+
+*** Accidental boundaries
+    * We can accidentally create boundaries without realising. For
+      example the trendy new language: people are attracted to the new
+      language and it keeps the "riff-raff" out.
+    * Eventually everyone will have to learn Scala, and therefore Scala
+      projects will stop being so successful.
+    * Consider Clojure as your next language.
+
+*** Teams
+
+    * Teams can change faster than software. Reorgs assign new teams to
+      slices of contexts, but the software still represents the old org
+      structure. Perhaps rewrite the code to match the new org structure.
